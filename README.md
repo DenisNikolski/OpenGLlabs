@@ -1,1 +1,1 @@
-# OpenGLlabs
+# WebGLlabs
