@@ -19,16 +19,12 @@
         <label for="points">Draws a single dot(gl.POINTS)</label>
       </div>
       <div>
-        <input type="radio" id="LINE_STRIP" name="drawMode" value="gl.LINE_STRIP" />
-        <label for="LINE_STRIP">Draws a straight line to the next vertex.(gl.LINE_STRIP)</label>
-      </div>
-      <div>
         <input type="radio" id="LINES" name="drawMode" value="gl.LINES" />
         <label for="LINES">Draws a line between a pair of vertices.(gl.LINES)</label>
       </div>
       <div>
-        <input type="radio" id="TRIANGLE_STRIP" name="drawMode" value="gl.TRIANGLE_STRIP" />
-        <label for="LINES">(gl.TRIANGLE_STRIP)</label>
+        <input type="radio" id="LINE_STRIP" name="drawMode" value="gl.LINE_STRIP" />
+        <label for="LINE_STRIP">Draws a straight line to the next vertex.(gl.LINE_STRIP)</label>
       </div>
       <div>
         <input type="radio" id="LINE_LOOP" name="drawMode" value="gl.LINE_LOOP" />
@@ -36,11 +32,15 @@
       </div>
       <div>
         <input type="radio" id="TRIANGLES" name="drawMode" value="gl.TRIANGLES" />
-        <label for="TRIANGLES">(gl.TRIANGLES)</label>
+        <label for="TRIANGLES">Draws triangles by 3n verteces(gl.TRIANGLES)</label>
+      </div>
+      <div>
+        <input type="radio" id="TRIANGLE_STRIP" name="drawMode" value="gl.TRIANGLE_STRIP" />
+        <label for="LINES">(gl.TRIANGLE_STRIP)</label>
       </div>
       <div>
         <input type="radio" id="TRIANGLE_FAN" name="drawMode" value="gl.TRIANGLE_FAN" />
-        <label for="TRIANGLE_FAN">Daraws a figure (gl.TRIANGLE_FAN)</label>
+        <label for="TRIANGLE_FAN">Draws a figure (gl.TRIANGLE_FAN)</label>
       </div>
     </fieldset>
   </div>

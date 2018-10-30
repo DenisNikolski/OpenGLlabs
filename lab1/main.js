@@ -62,16 +62,16 @@ function drawLines(canvas, vertices, sidesNumb, drawMode) {
 
   var numbVertices = (vertices.length / 3)
   // Create an empty buffer object to store the vertex buffer
-  var vertexBuffer = getVertexBuffer(gl, vertices)
-
+  var vertexBuffer = initVertexBuffer(gl, vertices)
+  var colorBuffer = initColorBuffer(gl, sidesNumb)
   /* =========================Shaders======================== */
-  var vertShader = getVertexShader(gl)
-  var fragShader = getfragShader(gl)
+  var vertShader = initVertexShader(gl)
+  var fragShader = initfragShader(gl)
   // Create a shader program object to store the combined shader program
-  var shaderProgram = getShaderProgram(gl, vertShader, fragShader)
+  var shaderProgram = initShaderProgram(gl, vertShader, fragShader)
 
   /* ======== Associating shaders to buffer objects ======== */
-  associateShadersToBufferObjects(gl, vertexBuffer, shaderProgram)
+  associateShadersToBufferObjects(gl, vertexBuffer, colorBuffer, shaderProgram)
 
   /* ============= Drawing the primitive =============== */
   draw(gl, canvas, numbVertices, drawMode)
@@ -81,7 +81,7 @@ function getVertices(sidesNumb) {
   var vertices = []
   var raduis = 0.5
   var angle
-  for (var i = 0; i < sidesNumb; i++) {
+  for (let i = 0; i < sidesNumb; i++) {
     angle = i * 2 * Math.PI / sidesNumb
     vertices.push(raduis * Math.cos(angle))
     vertices.push(raduis * Math.sin(angle))
@@ -93,7 +93,7 @@ function getVertices(sidesNumb) {
 function getDrawMode() {
   var drawMode = document.getElementsByName('drawMode')
   if (drawMode) {
-    for (var i = 0; i < drawMode.length; i++) {
+    for (let i = 0; i < drawMode.length; i++) {
       if (drawMode[i].checked) {
         return drawMode[i].value
       }
@@ -101,7 +101,7 @@ function getDrawMode() {
   }
 }
 
-function getVertexBuffer(gl, vertices) {
+function initVertexBuffer(gl, vertices) {
   var vertexBuffer = gl.createBuffer()
 
   // Bind appropriate array buffer to it
@@ -110,53 +110,52 @@ function getVertexBuffer(gl, vertices) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
   // Unbind the buffer
   gl.bindBuffer(gl.ARRAY_BUFFER, null)
+
   return vertexBuffer
 }
 
-function getVertexShader(gl) {
+function initVertexShader(gl) {
   // vertex shader source code
-  var vertCode =
-    'attribute vec3 coordinates;' +
-    'void main(void) {' +
-    ' gl_Position = vec4(coordinates, 1.0);' +
-    'gl_PointSize = 6.0;' +
-    '}'
+  var vertCode = `
+    attribute vec3 coordinates;
+    attribute vec4 aVertexColor;
+
+    varying lowp vec4 vColor;
+
+    void main(void) {
+    gl_Position = vec4(coordinates, 1.0);
+    gl_PointSize = 6.0;
+    vColor = aVertexColor;
+  } `
   // Create a vertex shader object
   var vertShader = gl.createShader(gl.VERTEX_SHADER)
   // Attach vertex shader source code
   gl.shaderSource(vertShader, vertCode)
   // Compile the vertex shader
   gl.compileShader(vertShader)
+
   return vertShader
 }
 
-function getfragShader(gl) {
+function initfragShader(gl) {
   // fragment shader source code
-  var fragCode =
-    'void main(void) {' +
-    ' gl_FragColor = vec4(0.0, 0.0, 0.0, 0.1);' +
-    '}'
+  var fragCode = `
+  varying lowp vec4 vColor;
+
+  void main(void) {
+     gl_FragColor = vColor;
+   }`
   // Create fragment shader object
   var fragShader = gl.createShader(gl.FRAGMENT_SHADER)
   // Attach fragment shader source code
   gl.shaderSource(fragShader, fragCode)
   // Compile the fragmentt shader
   gl.compileShader(fragShader)
+
   return fragShader
 }
 
-function associateShadersToBufferObjects(gl, vertexBuffer, shaderProgram) {
-  // Bind vertex buffer object
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-  // Get the attribute location
-  var coord = gl.getAttribLocation(shaderProgram, 'coordinates')
-  // Point an attribute to the currently bound VBO
-  gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0)
-  // Enable the attribute
-  gl.enableVertexAttribArray(coord)
-}
-
-function getShaderProgram(gl, vertShader, fragShader) {
+function initShaderProgram(gl, vertShader, fragShader) {
   var shaderProgram = gl.createProgram()
   // Attach a vertex shader
   gl.attachShader(shaderProgram, vertShader)
@@ -166,16 +165,79 @@ function getShaderProgram(gl, vertShader, fragShader) {
   gl.linkProgram(shaderProgram)
   // Use the combined shader program object
   gl.useProgram(shaderProgram)
+
+  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+    alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+    return null;
+  }
+
   return shaderProgram
+}
+
+function initColorBuffer(gl, sidesNumb) {
+
+  var colors = getColorArray(sidesNumb)
+
+  const colorBuffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
+
+  return colorBuffer;
+}
+
+function getColorArray(sidesNumb) {
+  var colorsArray = []
+  var baseColors = [
+    1.0, 1.0, 1.0, 1.0, // white
+    1.0, 0.0, 0.0, 1.0, // red
+    0.0, 1.0, 0.0, 1.0, // green
+    0.0, 0.0, 1.0, 1.0, // blue
+  ];
+
+  if (sidesNumb < 7) {
+    colorsArray.push(...baseColors);
+    colorsArray.push(...baseColors);
+  }
+
+  for (var i = 0; i < sidesNumb; i = i + 4) {
+    colorsArray.push(...baseColors)
+  }
+
+  return colorsArray
+}
+
+function associateShadersToBufferObjects(gl, vertexBuffer, colorBuffer, shaderProgram) {
+  let numComponents = 3;
+  let type = gl.FLOAT;
+  let normalize = false;
+  let stride = 0;
+  let offset = 0;
+  // Bind vertex buffer object
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+  // Get the attribute location
+  var coord = gl.getAttribLocation(shaderProgram, 'coordinates')
+  // Point an attribute to the currently bound VBO
+  gl.vertexAttribPointer(coord, numComponents, type, normalize, stride, offset)
+  // Enable the attribute
+  gl.enableVertexAttribArray(coord)
+
+  // color
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+  var colors = gl.getAttribLocation(shaderProgram, 'aVertexColor')
+  numComponents = 4;
+  gl.vertexAttribPointer(colors, numComponents, type, normalize, stride, offset)
+  gl.enableVertexAttribArray(colors)
 }
 
 function draw(gl, canvas, numbVertices, drawMode) {
   // Clear the canvas
-  gl.clearColor(0.5, 0.5, 0.5, 0.9)
+  gl.clearColor(0.0, 0.0, 0.0, 1.0)
+  gl.clearDepth(1.0)
   // Enable the depth test
   gl.enable(gl.DEPTH_TEST)
+  gl.depthFunc(gl.LEQUAL)
   // Clear the color buffer bit
-  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   // Set the view port
   gl.viewport(0, 0, canvas.width, canvas.height)
 
