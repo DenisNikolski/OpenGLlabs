@@ -2,48 +2,71 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 </head>
 
 <body>
-  <canvas width="330" height="330" id="tasks:1,2"></canvas>
-  <canvas width="330" height="330" id="task3"></canvas>
-  <canvas width="330" height="330" id="task4"></canvas>
-  <div>
-    <input type="range" id="rangeInput" name="rangeInput" min="3" max="100" value="3" onchange="updateTextInput(this.value);">
-    <input type="text" id="textInput" value="3">
-    <fieldset onchange="updateRadioButton();">
-      <legend>Select draw mode</legend>
-      <div>
-        <input type="radio" id="points" name="drawMode" value="gl.POINTS" checked />
-        <label for="points">Draws a single dot(gl.POINTS)</label>
-      </div>
-      <div>
-        <input type="radio" id="LINES" name="drawMode" value="gl.LINES" />
-        <label for="LINES">Draws a line between a pair of vertices.(gl.LINES)</label>
-      </div>
-      <div>
-        <input type="radio" id="LINE_STRIP" name="drawMode" value="gl.LINE_STRIP" />
-        <label for="LINE_STRIP">Draws a straight line to the next vertex.(gl.LINE_STRIP)</label>
-      </div>
-      <div>
-        <input type="radio" id="LINE_LOOP" name="drawMode" value="gl.LINE_LOOP" />
-        <label for="LINE_LOOP">Draws a straight line to the next vertex, and connects the last vertex back to the first(gl.LINE_LOOP)</label>
-      </div>
-      <div>
-        <input type="radio" id="TRIANGLES" name="drawMode" value="gl.TRIANGLES" />
-        <label for="TRIANGLES">Draws triangles by 3n verteces(gl.TRIANGLES)</label>
-      </div>
-      <div>
-        <input type="radio" id="TRIANGLE_STRIP" name="drawMode" value="gl.TRIANGLE_STRIP" />
-        <label for="LINES">(gl.TRIANGLE_STRIP)</label>
-      </div>
-      <div>
-        <input type="radio" id="TRIANGLE_FAN" name="drawMode" value="gl.TRIANGLE_FAN" />
-        <label for="TRIANGLE_FAN">Draws a figure (gl.TRIANGLE_FAN)</label>
-      </div>
+<canvas width="300" height="330" id="tasks:1,2" title="task1"></canvas>
+<canvas width="300" height="330" id="task3" title="task3"></canvas>
+<canvas width="300" height="330" id="task4" title="task4"></canvas>
+<canvas width="300" height="330" id="task7" title="task7"></canvas>
+<div>
+    <input type="range" id="rangeInput" name="rangeInput" min="3" max="100" value="3"
+           onchange="updateTextInput(this.value);" title="Number of sides">
+    <input type="text" id="textInput" value="3" title="Number of sides">
+    <fieldset onchange="updateDrawModeRadioButton();">
+        <legend>Select draw mode</legend>
+        <div>
+            <input type="radio" id="points" name="drawMode" value="gl.POINTS" checked/>
+            <label for="points">Draws a single dot(gl.POINTS)</label>
+        </div>
+        <div>
+            <input type="radio" id="LINES" name="drawMode" value="gl.LINES"/>
+            <label for="LINES">Draws a line between a pair of vertices.(gl.LINES)</label>
+        </div>
+        <div>
+            <input type="radio" id="LINE_STRIP" name="drawMode" value="gl.LINE_STRIP"/>
+            <label for="LINE_STRIP">Draws a straight line to the next vertex.(gl.LINE_STRIP)</label>
+        </div>
+        <div>
+            <input type="radio" id="LINE_LOOP" name="drawMode" value="gl.LINE_LOOP"/>
+            <label for="LINE_LOOP">Draws a straight line to the next vertex, and connects the last vertex back to the
+                first(gl.LINE_LOOP)</label>
+        </div>
+        <div>
+            <input type="radio" id="TRIANGLES" name="drawMode" value="gl.TRIANGLES"/>
+            <label for="TRIANGLES">Draws triangles by 3n vertices(gl.TRIANGLES)</label>
+        </div>
+        <div>
+            <input type="radio" id="TRIANGLE_STRIP" name="drawMode" value="gl.TRIANGLE_STRIP" title=""/>
+            <label for="LINES">(gl.TRIANGLE_STRIP)</label>
+        </div>
+        <div>
+            <input type="radio" id="TRIANGLE_FAN" name="drawMode" value="gl.TRIANGLE_FAN"/>
+            <label for="TRIANGLE_FAN">Draws a figure (gl.TRIANGLE_FAN)</label>
+        </div>
     </fieldset>
-  </div>
+    <fieldset onchange="updateCullFace();">
+        <legend>Select polygon culling mode</legend>
+        <div>
+            <input type="checkbox" id="isCullFaceEnable" name="isCullFaceEnable"
+                   value="isCullFaceEnable"/>
+            <label for="isCullFaceEnable">isCullFaceEnable</label>
+        </div>
+        <div>
+            <input type="radio" id="FRONT" name="cullFace" value="gl.FRONT"/>
+            <label for="FRONT">gl.FRONT</label>
+        </div>
+        <div>
+            <input type="radio" id="BACK" name="cullFace" value="gl.BACK"/>
+            <label for="BACK">gl.BACK</label>
+        </div>
+        <!--<div>-->
+            <!--<input type="radio" id="FRONT_AND_BACK" name="cullFace" value="gl.FRONT_AND_BACK" checked/>-->
+            <!--<label for="FRONT_AND_BACK">gl.FRONT_AND_BACK</label>-->
+        <!--</div>-->
+    </fieldset>
+</div>
 
 
 </body>
