@@ -1,0 +1,56 @@
+@import url("https://webglfundamentals.org/webgl/resources/webgl-tutorials.css");
+
+body {
+    margin: 0;
+}
+
+canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+#ui {
+    width: 380px;
+    padding: 0.25em;
+}
+
+body, document {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+}
+
+#gridContainer {
+    position: absolute;
+    z-index: 2;
+    top: 1px;
+    left: 1px;
+    width:150px;
+    height: 300px;
+    g-background: rgba(255, 0, 0, 0.2);
+}
+
+#gridContainer > svg {
+    /*left: 15px;*/
+    /*top: 15px;*/
+    width: 100%;
+    height: 100%;
+}
+
+#uiContainer {
+    width: 380px;
+    left: 0;
+    top: 50%;
+    font-size: x-large;
+}
+
+#ui > div {
+    margin-bottom: 1em;
+}
+
+#container {
+    position: relative;
+}
