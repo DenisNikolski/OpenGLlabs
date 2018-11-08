@@ -45,7 +45,7 @@ function main() {
         new Uint8Array([0, 0, 255, 255]));
     // Asynchronously load an image
     const image = new Image();
-    image.src = "wood.png";
+    image.src = "media/wood.png";
     image.addEventListener('load', function () {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, texture);
